@@ -42,13 +42,16 @@ for training_index, test_index in kfold_object.split(data):
   target_test = target[test_index]
   
 
+
   machine = Sequential()
-  machine.add(layers.Dense(16, activation="sigmoid", input_shape=(data_training.shape[1],)  ))
-  machine.add(layers.Dense(16, activation="sigmoid"))
+  machine.add(layers.Dense(512, activation="relu", input_shape=(data_training.shape[1],)  ))
+  machine.add(layers.Dense(128, activation="relu"))
+  machine.add(layers.Dense(64, activation="relu"))
+  machine.add(layers.Dense(64, activation="relu"))
   machine.add(layers.Dense(10, activation="softmax"))
-  machine.compile(optimizer="adam", loss="sparse_categorical_crossentropy", metrics=['accuracy'])
+  machine.compile(optimizer="sgd", loss="sparse_categorical_crossentropy", metrics=['accuracy'])
   
-  machine.fit(data_training, target_training, epochs=5, batch_size=10)
+  machine.fit(data_training, target_training, epochs=30, batch_size=64)
   
   new_target = numpy.argmax(machine.predict(data_test), axis=-1)
   
